@@ -20,8 +20,6 @@ unsigned long debounceTime = 200; // Debounce time in ms
 void setup() {
   pinMode(A0 , INPUT);
   lcd.begin(16, 2);
-  // Print a message to the LCD
-  lcd.print("Displacement:");
 }
  // Enter the loop function
 void loop() {
@@ -58,18 +56,21 @@ void loop() {
   // Logic statement for judging whether the calculated number os fraction or integer
   if (result_peak % 1 == 0){
     new_result = result_peak; // Store the current result
-    distance = result_peak * 520e-9 / (2 * 1.00029); // Calculate the actual distance with variables provided 
+    distance = abs(new_result - former_result) * 520e-2 / (2 * 1.00029); // Calculate the actual distance with variables provided 
   } 
   
   // Other logic condition
   else{
     result_peak = result_peak + 0.5; // Make the actual pattern number to its nearest value
     new_result = result_peak; // Store the current result
-    distance = result_peak * 520e-9 / (2 * 1.00029); // Calculate the actual distance with variables provided
+    distance = abs(new_result - former_result) * 520e-2 / (2 * 1.00029); // Calculate the actual distance with variables provided
   }
-
+  
+  lcd.setCursor(0, 0); // Initialize the second column of the LCD
+  lcd.print("Displacement:"); // Print a message to the LCD
   lcd.setCursor(0, 1); // Initialize the second column of the LCD
   lcd.print(distance); // Output the calculated distance value
+  lcd.print("e^-7 metre");
   delay(4500); // Delay time initialize
 
   // Other logic condition
@@ -78,7 +79,8 @@ void loop() {
     lcd.print("Direction:"); // Output the title for the parameter
     lcd.setCursor(0, 1); // Initialize the second column of the LCD
     lcd.print("Move away from"); // Output the moving direction for the displacement
-    delay(500); // Delay time initialize
+    delay(4500); // Delay time initialize
+    lcd.clear();
   }
 
   // Other logic condition
@@ -87,6 +89,7 @@ void loop() {
     lcd.print("Direction:"); // Output the title for the parameter
     lcd.setCursor(0, 1); // Initialize the second column of the LCD
     lcd.print("Move close to"); // Output the moving direction for the displacement
-    delay(500); // Delay time initialize
+    delay(4500); // Delay time initialize
+    lcd.clear();
   }
 }
